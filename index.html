@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mochi Squish 🍡</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            background: #fff4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .game {
+            text-align: center;
+        }
+
+        h1 {
+            color: #d96b91;
+            margin-bottom: 5px;
+            font-size: 36px;
+        }
+
+        .subtitle {
+            color: #9b7180;
+            margin-top: 0;
+        }
+
+        .counter {
+            font-size: 20px;
+            color: #a95d7a;
+            margin: 20px;
+        }
+
+        /* MOCHI */
+
+        .mochi-area {
+            width: 350px;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .mochi {
+            width: 190px;
+            height: 145px;
+            background: #f8b9cf;
+            border-radius: 45% 45% 42% 42%;
+            position: relative;
+            cursor: pointer;
+
+            box-shadow:
+                inset 0 -12px 0 rgba(180, 90, 120, 0.12),
+                0 15px 30px rgba(180, 100, 130, 0.18);
+
+            transition:
+                transform 0.12s ease,
+                width 0.12s ease,
+                height 0.12s ease;
+        }
+
+        .mochi:hover {
+            transform: scale(1.04);
+        }
+
+        /* squished state */
+        .mochi.squish {
+            transform: scale(1.35, 0.55);
+            width: 210px;
+            height: 150px;
+        }
+
+        .mochi:active {
+            transform: scale(1.3, 0.5);
+        }
+
+        /* face */
+
+        .eye {
+            width: 13px;
+            height: 18px;
+            background: #563743;
+            border-radius: 50%;
+            position: absolute;
+            top: 53px;
+        }
+
+        .eye.left {
+            left: 62px;
+        }
+
+        .eye.right {
+            right: 62px;
+        }
+
+        .mouth {
+            width: 25px;
+            height: 15px;
+            border-bottom: 4px solid #563743;
+            border-radius: 0 0 50% 50%;
+            position: absolute;
+            top: 76px;
+            left: 83px;
+        }
+
+        .blush {
+            width: 25px;
+            height: 12px;
+            background: #ed8eaa;
+            border-radius: 50%;
+            position: absolute;
+            top: 76px;
+            opacity: 0.65;
+        }
+
+        .blush.left {
+            left: 30px;
+        }
+
+        .blush.right {
+            right: 30px;
+        }
+
+        /* little sparkle */
+
+        .sparkle {
+            position: absolute;
+            font-size: 28px;
+            pointer-events: none;
+            animation: pop 0.7s forwards;
+        }
+
+        @keyframes pop {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(0.5);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-80px) scale(1.4);
+            }
+        }
+
+        button {
+            border: none;
+            background: #e78fac;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        button:hover {
+            background: #d87999;
+        }
+
+        .message {
+            height: 30px;
+            margin-top: 15px;
+            color: #b25d7b;
+            font-weight: bold;
+        }
+
+        /* floating decorations */
+
+        .decor {
+            position: fixed;
+            pointer-events: none;
+            opacity: 0.7;
+            font-size: 30px;
+        }
+
+        .d1 { top: 10%; left: 15%; }
+        .d2 { top: 20%; right: 15%; }
+        .d3 { bottom: 15%; left: 20%; }
+        .d4 { bottom: 12%; right: 20%; }
+    </style>
+</head>
+
+<body>
+
+    <div class="decor d1">✨</div>
+    <div class="decor d2">🌸</div>
+    <div class="decor d3">🍓</div>
+    <div class="decor d4">✨</div>
+
+    <div class="game">
+
+        <h1>🍡 Mochi Squish 🍡</h1>
+
+        <p class="subtitle">
+            You know you want to squish it.
+        </p>
+
+        <div class="counter">
+            Squishes: <span id="score">0</span>
+        </div>
+
+        <div class="mochi-area">
+
+            <div class="mochi" id="mochi">
+
+                <div class="eye left"></div>
+                <div class="eye right"></div>
+
+                <div class="blush left"></div>
+                <div class="blush right"></div>
+
+                <div class="mouth"></div>
+
+            </div>
+
+        </div>
+
+        <div class="message" id="message">
+            Click the mochi 🍡
+        </div>
+
+        <button onclick="resetGame()">
+            Reset squishes
+        </button>
+
+    </div>
+
+
+    <script>
+
+        const mochi = document.getElementById("mochi");
+        const scoreText = document.getElementById("score");
+        const message = document.getElementById("message");
+
+        let score = 0;
+
+        const messages = [
+            "hehehe 🍡",
+            "SQUISH!",
+            "so softtt",
+            "another one!",
+            "mochi has been squished",
+            "you cannot resist",
+            "🍡💗",
+            "perfect squish",
+            "again again again!"
+        ];
+
+        mochi.addEventListener("click", function(event) {
+
+            score++;
+
+            scoreText.textContent = score;
+
+            // squish animation
+            mochi.classList.remove("squish");
+
+            // force animation to restart
+            void mochi.offsetWidth;
+
+            mochi.classList.add("squish");
+
+            setTimeout(() => {
+                mochi.classList.remove("squish");
+            }, 180);
+
+            // random message
+            const randomMessage =
+                messages[Math.floor(Math.random() * messages.length)];
+
+            message.textContent = randomMessage;
+
+            // sparkle
+            createSparkle(event.clientX, event.clientY);
+
+        });
+
+
+        function createSparkle(x, y) {
+
+            const sparkle = document.createElement("div");
+
+            sparkle.className = "sparkle";
+            sparkle.textContent = "✨";
+
+            sparkle.style.left = x + "px";
+            sparkle.style.top = y + "px";
+
+            document.body.appendChild(sparkle);
+
+            setTimeout(() => {
+                sparkle.remove();
+            }, 700);
+        }
+
+
+        function resetGame() {
+
+            score = 0;
+
+            scoreText.textContent = score;
+
+            message.textContent = "Click the mochi 🍡";
+        }
+
+    </script>
+
+</body>
+</html>
