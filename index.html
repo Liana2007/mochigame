@@ -51,6 +51,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            margin: 0 auto;
         }
 
         .mochi {
@@ -106,13 +107,22 @@
         }
 
         .mouth {
-            width: 30px;
-            height: 15px;
-            border-bottom: 4px solid #563743;
+            width: 36px;
+            height: 24px;
+            background: #563743;
             border-radius: 0 0 50% 50%;
             position: absolute;
-            top: 76px;
-            left: 83px;
+            top: 70px;
+            left: 79px;
+            transition: all 0.12s ease;
+        }
+
+        .mochi.squish .mouth {
+            width: 48px;
+            height: 35px;
+            top: 65px;
+            left: 73px;
+            border-radius: 50%;
         }
 
         .blush {
