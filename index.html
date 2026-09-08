@@ -238,6 +238,8 @@
 
         <div class="counter">
             Squishes: <span id="score">0</span>
+            <br>
+            High Score: <span id="highScore">0</span>
         </div>
 
         <div class="mochi-area">
@@ -271,9 +273,14 @@
 
         const mochi = document.getElementById("mochi");
         const scoreText = document.getElementById("score");
+        const highScoreText = document.getElementById("highScore");
         const message = document.getElementById("message");
 
         let score = 0;
+
+        let highScore = Number(localStorage.getItem("mochiHighScore")) || 0;
+
+        highScoreText.textContent = highScore;
 
         const messages = [
             "hehehehehehe",
@@ -293,6 +300,15 @@
             score++;
 
             scoreText.textContent = score;
+
+            if (score > highScore) {
+                highScore = score;
+                highScoreText.textContent = highScore;
+
+                localStorage.setItem("mochiHighScore", highScore);
+
+                message.textContent = "NEW HIGH SCORE!!! 🍡";
+            }
 
             // squish animation
             mochi.classList.remove("squish");
