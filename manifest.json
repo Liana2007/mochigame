@@ -1,0 +1,15 @@
+{
+    "name": "KILL THE MOCHI!!",
+    "short_name": "Mochi",
+    "start_url": "./",
+    "display": "standalone",
+    "background_color": "#fff4f8",
+    "theme_color": "#e78fac",
+    "icons": [
+        {
+            "src": "icon.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
